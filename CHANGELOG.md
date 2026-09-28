@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.3.1
+
+- Expand LSP skill routing to cover hook setup, configuration, and troubleshooting requests.
+- Document safe per-repository installation, existing-hook integration, and staged diagnostic verification.
+
 ## 0.3.0
 
 - Add deterministic staged-file LSP checks and safe per-repository pre-commit hook installation.

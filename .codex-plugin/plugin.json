@@ -1,0 +1,21 @@
+{
+	"name": "codex-lsp-plugin",
+	"version": "0.3.0",
+	"description": "Language Server Protocol tools, post-edit diagnostics, and staged pre-commit checks for Codex.",
+	"author": {
+		"name": "Mwong"
+	},
+	"license": "MIT",
+	"keywords": ["lsp", "diagnostics", "code-quality", "pre-commit"],
+	"skills": "./skills/",
+	"mcpServers": "./.mcp.json",
+	"interface": {
+		"displayName": "Codex LSP",
+		"shortDescription": "Language-aware code checks and navigation",
+		"longDescription": "Adds local LSP diagnostics, definitions, references, symbols, safe renames, post-edit checks, and deterministic staged-file pre-commit validation.",
+		"developerName": "Mwong",
+		"category": "Productivity",
+		"capabilities": ["LSP diagnostics", "Code navigation", "Pre-commit validation"],
+		"defaultPrompt": "Use LSP tools to inspect code safely, run error diagnostics after relevant edits, and report missing language servers clearly."
+	}
+}

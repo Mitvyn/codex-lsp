@@ -33,3 +33,5 @@ Project config lives at `.codex/lsp-client.json`; user config lives at `~/.codex
 ```
 
 Use `lsp.status` first when diagnostics report a missing language server.
+
+For commit preparation, run repository's normal checks plus `codex-lsp check --changed`. This deterministic CLI checks staged files only and consumes no model tokens. Install its Git hook with `codex-lsp install-hook /path/to/repository`; existing unrelated hooks are preserved and must be integrated manually.

@@ -1,6 +1,6 @@
 {
 	"name": "@code-yeongyu/codex-lsp",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "Codex plugin that exposes Language Server Protocol tools and post-edit diagnostics.",
 	"type": "module",
 	"packageManager": "npm@11.12.1",
@@ -26,6 +26,8 @@
 	},
 	"files": [
 		"dist",
+		"packages/lsp-tools-mcp/dist",
+		"packages/lsp-tools-mcp/package.json",
 		"hooks",
 		"skills",
 		".codex-plugin",
@@ -42,6 +44,8 @@
 		"pretest": "node scripts/bootstrap-submodule.mjs",
 		"test": "vitest --run",
 		"test:watch": "vitest",
+		"check:staged": "node dist/cli.js check --changed",
+		"install-hook": "node dist/cli.js install-hook",
 		"pretypecheck": "node scripts/bootstrap-submodule.mjs",
 		"typecheck": "tsc --noEmit",
 		"lint": "biome check src test",

@@ -11,8 +11,8 @@ type PackageJson = {
 
 type PluginJson = {
 	readonly version: string;
-	readonly hooks: string;
 	readonly mcpServers: string;
+	readonly skills: string;
 };
 
 type HookCommand = {
@@ -82,12 +82,12 @@ describe("plugin package metadata", () => {
 			"@code-yeongyu/lsp-tools-mcp": "file:./packages/lsp-tools-mcp",
 		});
 		expect(packageJson.bin["codex-lsp"]).toBe("./dist/cli.js");
-		expect(pluginJson.hooks).toBe("./hooks/hooks.json");
 		expect(pluginJson.mcpServers).toBe("./.mcp.json");
+		expect(pluginJson.skills).toBe("./skills/");
 		expect(cliSource.startsWith("#!/usr/bin/env node")).toBe(true);
 		expect(command).toBe(`node "${pluginRoot}/dist/cli.js" hook post-tool-use`);
 		expect(lspServer?.command).toBe("node");
-		expect(lspServer?.args).toEqual(["./packages/lsp-tools-mcp/dist/cli.js", "mcp"]);
+		expect(lspServer?.args).toEqual(["./dist/cli.js", "mcp"]);
 	});
 
 	it("#given LSP skill guidance #when validating MCP tool instructions #then tool names are not framed as shell commands", () => {
@@ -119,8 +119,8 @@ function isPluginJson(value: unknown): value is PluginJson {
 	return (
 		isRecord(value) &&
 		typeof value["version"] === "string" &&
-		typeof value["hooks"] === "string" &&
-		typeof value["mcpServers"] === "string"
+		typeof value["mcpServers"] === "string" &&
+		typeof value["skills"] === "string"
 	);
 }
 

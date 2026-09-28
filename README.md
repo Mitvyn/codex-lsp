@@ -8,7 +8,7 @@ Codex plugin that ports the standalone LSP runtime from [`pi-lsp-client`](https:
 
 The LSP runtime moved to [`lsp-tools-mcp`](https://github.com/code-yeongyu/lsp-tools-mcp) and is consumed here as a git submodule at `packages/lsp-tools-mcp/`.
 
-- `codex-lsp` keeps Codex-specific integration (`hook post-tool-use`, plugin metadata, package wiring).
+- `codex-lsp` keeps Codex-specific integration (`hook post-tool-use`, staged pre-commit checks, plugin metadata, package wiring).
 - `lsp-tools-mcp` owns MCP runtime, LSP manager, and tool implementations.
 - `src/cli.ts` routes `mcp` to upstream runtime and keeps `hook post-tool-use` local.
 
@@ -22,6 +22,8 @@ The LSP runtime moved to [`lsp-tools-mcp`](https://github.com/code-yeongyu/lsp-t
 | no diagnostics | emits no hook output |
 | unsupported extension | emits no hook output |
 | missing configured language server | surfaces the install/config message through hook or MCP output |
+| staged supported file has LSP errors | exits non-zero from `check --changed` and blocks commit |
+| staged extension has no configured LSP | skips it; repository's normal checks remain responsible |
 
 Deletes are ignored because they cannot introduce new diagnostics.
 
@@ -86,7 +88,30 @@ node "${PLUGIN_ROOT}/dist/cli.js" hook post-tool-use
 The MCP command is:
 
 ```bash
-node ./packages/lsp-tools-mcp/dist/cli.js mcp
+node ./dist/cli.js mcp
+```
+
+## Pre-commit Check
+
+Build plugin, then install hook in each repository that should use staged-file LSP validation:
+
+```bash
+npm run build
+node dist/cli.js install-hook /path/to/repository
+```
+
+Hook runs:
+
+```bash
+node /absolute/path/to/codex-lsp/dist/cli.js check --changed
+```
+
+Only staged added, copied, modified, and renamed files are checked. Missing configured language server and error-level diagnostics block commit. Unsupported extensions are skipped. Existing unrelated pre-commit hooks are never overwritten; installer prints exact command to add to existing hook manager.
+
+Run without installing hook:
+
+```bash
+node dist/cli.js check --changed
 ```
 
 ## Local Development

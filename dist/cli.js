@@ -1,8 +1,11 @@
 #!/usr/bin/env node
-import { argv, stderr } from "node:process";
-import { disposeDefaultLspManager } from "@code-yeongyu/lsp-tools-mcp/dist/lsp/manager.js";
-import { runMcpStdioServer } from "@code-yeongyu/lsp-tools-mcp/dist/mcp.js";
+import { resolve } from "node:path";
+import { argv, stderr, stdout } from "node:process";
+import { disposeDefaultLspManager } from "../packages/lsp-tools-mcp/dist/lsp/manager.js";
+import { runMcpStdioServer } from "../packages/lsp-tools-mcp/dist/mcp.js";
+import { runChangedCheck } from "./check.js";
 import { runPostToolUseHookCli } from "./codex-hook.js";
+import { installPreCommitHook } from "./install-hook.js";
 async function main() {
     const [command = "mcp", subcommand = ""] = argv.slice(2);
     try {
@@ -14,7 +17,19 @@ async function main() {
             await runMcpStdioServer();
             return;
         }
-        stderr.write("Usage: codex-lsp [mcp | hook post-tool-use]\n");
+        if (command === "check" && subcommand === "--changed") {
+            process.exitCode = await runChangedCheck();
+            return;
+        }
+        if (command === "install-hook") {
+            const cliPath = argv[1];
+            if (!cliPath)
+                throw new Error("Cannot resolve codex-lsp CLI path");
+            const result = await installPreCommitHook(subcommand || process.cwd(), resolve(cliPath));
+            stdout.write(`LSP pre-commit hook ${result.status}: ${result.hookPath}\n`);
+            return;
+        }
+        stderr.write("Usage: codex-lsp [mcp | hook post-tool-use | check --changed | install-hook [repo]]\n");
         process.exitCode = 2;
     }
     finally {

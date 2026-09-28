@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.3.0
+
+- Add deterministic staged-file LSP checks and safe per-repository pre-commit hook installation.
+- Package Codex plugin metadata and route MCP execution through the plugin entrypoint.
+- Preserve existing repository hooks and report missing configured language servers as commit blockers.
+
 ## 0.2.0
 
 - Extracted the LSP runtime and MCP server into [`@code-yeongyu/lsp-tools-mcp`](https://github.com/code-yeongyu/lsp-tools-mcp).
